@@ -14,7 +14,10 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
     return Scaffold(
       appBar: AppBar(title: const Text("Verify")),
       body: Column(children: [
-        const Text('Please verify your email'),
+        Text(
+            "We've sent you an email verification. Please open it to verify your account (${FirebaseAuth.instance.currentUser?.email})."),
+        const Text(
+            "If you haven't received a verification email, press the button below."),
         TextButton(
             onPressed: () {
               final user = FirebaseAuth.instance.currentUser;
