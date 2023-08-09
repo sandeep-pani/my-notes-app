@@ -1,8 +1,7 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mynotes2/constants/routes.dart';
-import '../firebase_options.dart';
+import 'package:mynotes2/utilities/show_error_dialog.dart';
 
 import 'dart:developer' as devtools show log;
 
@@ -71,6 +70,7 @@ class _LoginViewState extends State<LoginView> {
 
                   devtools.log(userCredential.toString());
                 } on FirebaseAuthException catch (e) {
+                  await showErrorDialog(context, "Error: ${e.code}");
                   devtools.log(e.code);
                 }
               },
