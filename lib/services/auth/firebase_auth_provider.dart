@@ -1,3 +1,6 @@
+import 'package:firebase_core/firebase_core.dart';
+
+import '../../firebase_options.dart';
 import 'auth_user.dart';
 import 'auth_provider.dart';
 import 'auth_exceptions.dart';
@@ -6,6 +9,13 @@ import 'package:firebase_auth/firebase_auth.dart'
     show FirebaseAuth, FirebaseAuthException;
 
 class FirebaseAuthProvider implements AuthProvider {
+  @override
+  Future<void> initialize() async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
+
   @override
   Future<AuthUser> createUser({
     required String email,
@@ -23,9 +33,9 @@ class FirebaseAuthProvider implements AuthProvider {
         throw UserNotLoggedInAuthException();
       }
     } on FirebaseAuthException catch (_) {
-      throw GenericAuthException();
+      throw GenericAuthException(_.code);
     } catch (_) {
-      throw GenericAuthException();
+      throw GenericAuthException("Abnormal Error");
     }
   }
 
@@ -40,7 +50,7 @@ class FirebaseAuthProvider implements AuthProvider {
   }
 
   @override
-  Future<AuthUser> logIn(
+  Future<AuthUser> login(
       {required String email, required String password}) async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -55,9 +65,9 @@ class FirebaseAuthProvider implements AuthProvider {
         throw UserNotLoggedInAuthException();
       }
     } on FirebaseAuthException catch (_) {
-      throw GenericAuthException();
+      throw GenericAuthException(_.code);
     } catch (_) {
-      throw GenericAuthException();
+      throw GenericAuthException("Abnormal Error");
     }
   }
 

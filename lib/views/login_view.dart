@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mynotes2/constants/routes.dart';
+import 'package:mynotes2/services/auth/auth_exceptions.dart';
+import 'package:mynotes2/services/auth/auth_service.dart';
 import 'package:mynotes2/utilities/show_error_dialog.dart';
 
 import 'dart:developer' as devtools show log;
@@ -60,13 +61,12 @@ class _LoginViewState extends State<LoginView> {
                 final password = _password.text;
 
                 try {
-                  final userCredential =
-                      await FirebaseAuth.instance.signInWithEmailAndPassword(
+                  final userCredential = await AuthService.firebase().login(
                     email: email,
                     password: password,
                   );
-                  final user = FirebaseAuth.instance.currentUser;
-                  if (user?.emailVerified ?? false) {
+                  final user = AuthService.firebase().currentUser;
+                  if (user?.isEmailVerified ?? false) {
                     Navigator.of(context)
                         .pushNamedAndRemoveUntil(notesRoute, (route) => false);
                   } else {
@@ -75,9 +75,9 @@ class _LoginViewState extends State<LoginView> {
                   }
 
                   devtools.log(userCredential.toString());
-                } on FirebaseAuthException catch (e) {
-                  await showErrorDialog(context, "Error: ${e.code}");
-                  devtools.log(e.code);
+                } on GenericAuthException catch (e) {
+                  await showErrorDialog(context, "Error: ${e.errorCode}");
+                  devtools.log(e.errorCode);
                 }
               },
               child: const Text('Login')),
