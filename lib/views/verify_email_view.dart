@@ -15,7 +15,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
       appBar: AppBar(title: const Text("Verify")),
       body: Column(children: [
         Text(
-            "We've sent you an email verification. Please open it to verify your account (${AuthService.firebase().currentUser?.userEmail})."),
+            "We've sent you an email verification. Please open it to verify your account (${AuthService.firebase().currentUser?.email})."),
         const Text(
             "If you haven't received a verification email, press the button below."),
         TextButton(

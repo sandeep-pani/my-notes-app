@@ -53,7 +53,7 @@ void main() {
       );
       expect(provider.currentUser, user);
       expect(user.isEmailVerified, false);
-      expect(user.userEmail, provider.currentUser?.userEmail);
+      expect(user.email, provider.currentUser?.email);
     });
     test("Logged in user should be able to get verified", () {
       provider.sendEmailVerification();
@@ -116,7 +116,7 @@ class MockAuthProvider implements AuthProvider {
     if (email == 'foo@bar.com') throw GenericAuthException('User Not Found');
     if (password == 'foobar') throw GenericAuthException('Wrong Password');
 
-    final user = AuthUser(isEmailVerified: false, userEmail: email);
+    final user = AuthUser(isEmailVerified: false, email: email);
     _user = user;
     return Future.value(user);
   }
@@ -138,8 +138,7 @@ class MockAuthProvider implements AuthProvider {
     }
     final user = _user;
     if (user == null) throw GenericAuthException("User Not Found");
-    final newUser =
-        AuthUser(isEmailVerified: true, userEmail: _user?.userEmail);
+    final newUser = AuthUser(isEmailVerified: true, email: _user?.email);
     _user = newUser;
   }
 }
