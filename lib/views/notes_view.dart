@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mynotes2/services/auth/auth_service.dart';
 
@@ -60,7 +62,11 @@ class _NotesViewState extends State<NotesView> {
             },
           )
         ]),
-        body: const Text("hello world"));
+        body: FutureBuilder(
+            future: _notesService.getOrCreateUser(email: userEmail),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {}
+            }));
   }
 }
 
