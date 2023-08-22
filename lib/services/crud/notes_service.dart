@@ -16,12 +16,16 @@ class NotesService {
   // making it singleton class
   static final NotesService _shared = NotesService._sharedInstance();
 
-  // this is an empty constructor:
-  NotesService._sharedInstance();
+  NotesService._sharedInstance() {
+    _notesStreamController = StreamController<List<DatabaseNote>>.broadcast(
+      onListen: () {
+        _notesStreamController.sink.add(_notes);
+      },
+    );
+  }
   factory NotesService() => _shared;
 
-  final _notesStreamController =
-      StreamController<List<DatabaseNote>>.broadcast();
+  late final StreamController<List<DatabaseNote>> _notesStreamController;
 
   Stream<List<DatabaseNote>> get allNotes => _notesStreamController.stream;
 
@@ -77,6 +81,7 @@ class NotesService {
     return notes.map((noteRow) => DatabaseNote.fromRow(noteRow));
   }
 
+//what does this function do?
   Future<DatabaseNote> getNote({required int id}) async {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
@@ -91,8 +96,8 @@ class NotesService {
       throw CouldNotFindNote();
     } else {
       final note = DatabaseNote.fromRow(notes.first);
-      _notes.removeWhere((notes) => note.id == id);
-      _notesStreamController.add(_notes);
+      // _notes.removeWhere((notes) => notes.id == id);
+      // _notesStreamController.add(_notes);
 
       return note;
     }
@@ -113,11 +118,10 @@ class NotesService {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     final deletedCount = await db.delete(
-      userTable,
+      noteTable,
       where: 'id = ?',
       whereArgs: [id],
     );
-
     if (deletedCount == 0) {
       throw CouldNotDeleteNote();
     } else {

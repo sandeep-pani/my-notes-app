@@ -50,10 +50,11 @@ class _NewNoteViewState extends State<NewNoteView> {
     return await _notesService.createNote(owner: owner);
   }
 
-  void _deleteNoteIfTextIsEmpty() {
+  void _deleteNoteIfTextIsEmpty() async {
     final note = _note;
     if (_textController.text.isEmpty && note != null) {
-      _notesService.deleteNote(id: note.id);
+      print("trying to delete?");
+      await _notesService.deleteNote(id: note.id);
     }
   }
 
