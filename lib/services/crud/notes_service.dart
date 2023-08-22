@@ -7,6 +7,7 @@ import 'package:path/path.dart' show join;
 
 import 'crud_exceptions.dart';
 
+/// Mine: This service is used to control notes in the db
 class NotesService {
   Database? _db;
 
@@ -156,6 +157,7 @@ class NotesService {
     return note;
   }
 
+  /// Mine: returns user from db
   Future<DatabaseUser> getUser({required String email}) async {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
