@@ -116,7 +116,7 @@ class MockAuthProvider implements AuthProvider {
     if (email == 'foo@bar.com') throw GenericAuthException('User Not Found');
     if (password == 'foobar') throw GenericAuthException('Wrong Password');
 
-    final user = AuthUser(isEmailVerified: false, email: email);
+    final user = AuthUser(id: 'my_id', isEmailVerified: false, email: email);
     _user = user;
     return Future.value(user);
   }
@@ -138,7 +138,8 @@ class MockAuthProvider implements AuthProvider {
     }
     final user = _user;
     if (user == null) throw GenericAuthException("User Not Found");
-    final newUser = AuthUser(isEmailVerified: true, email: _user?.email);
+    final newUser =
+        AuthUser(id: 'my_id', isEmailVerified: true, email: _user!.email);
     _user = newUser;
   }
 }
